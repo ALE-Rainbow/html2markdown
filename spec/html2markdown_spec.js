@@ -48,6 +48,11 @@ for(var key in parsers) {
 			expect(md).toMatch(/\#{4} H4\n\n/);
 		});
 
+		it("should be able to convert '<code>while(1){}</code>' to '`while(1){}`", function() {
+			var md = markdown("<code>while(1){}</code>");
+			expect(md).toMatch(/`while\(1\){}`/);
+		});
+
 		it("should be able to convert '<h5>H5</h5>' to '##### H5\\n\\n'", function() {
 			var md = markdown("<h5>H5</h5>");
 			expect(md).toMatch(/\#{5} H5\n\n/);

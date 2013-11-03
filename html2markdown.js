@@ -76,6 +76,7 @@ function html2markdown(html, opts) {
 		"h6": "###### ",
 		"b": "**",
 		"strong": "**",
+    "code": "`",
 		"i": "_",
 		"em": "_",
 		"dfn": "_",
