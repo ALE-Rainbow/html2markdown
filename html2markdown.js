@@ -76,7 +76,8 @@ function html2markdown(html, opts) {
 		"h6": "###### ",
 		"b": "**",
 		"strong": "**",
-    "code": "`",
+		"code": "`",
+		"codeblock": "```",
 		"i": "_",
 		"em": "_",
 		"dfn": "_",
@@ -232,6 +233,15 @@ function html2markdown(html, opts) {
 				nodeList.push(markdownTags[tag]);
 				break;
 			case "code":
+				if (preStack.length > 0) {
+					var attribs = convertAttrs(attrs);
+					console.log(JSON.stringify(attribs) + " " + preStack.length);
+					attribs["class"] ? lang = (attribs["class"].value ? attribs["class"].value.replace("language-", "") : "") : lang = "";
+					nodeList.push("\n```" + lang + "\n");
+				} else {
+					nodeList.push(markdownTags[tag]);
+				}
+				break;
 			case "span":
 				if (preStack.length > 0) {
 					break;
@@ -398,6 +408,13 @@ function html2markdown(html, opts) {
 					nodeList.push(markdownTags[tag]);
 				}
 				break;
+			case "code":
+				if(preStack.length) {
+					nodeList.push("\n```\n");
+				} else {
+					nodeList.push(markdownTags[tag]);
+				}
+				break;
 			case "a":
 				var text = sliceText("[");
 				text = text.replace(/\s+/g, " ");
@@ -410,7 +427,7 @@ function html2markdown(html, opts) {
 
 				var attrs = linkAttrStack.pop();
 				var url;
-				attrs["href"] &&  attrs["href"].value != "" ? url = attrs["href"].value : url = "";
+				attrs["href"] && attrs["href"].value != "" ? url = attrs["href"].value : url = "";
 
 				if (url == "") {
 					nodeList.pop();
