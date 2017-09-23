@@ -77,7 +77,6 @@ function html2markdown(html, opts) {
 		"b": "**",
 		"strong": "**",
 		"code": "`",
-		"codeblock": "```",
 		"i": "_",
 		"em": "_",
 		"dfn": "_",
@@ -235,7 +234,6 @@ function html2markdown(html, opts) {
 			case "code":
 				if (preStack.length > 0) {
 					var attribs = convertAttrs(attrs);
-					console.log(JSON.stringify(attribs) + " " + preStack.length);
 					attribs["class"] ? lang = (attribs["class"].value ? attribs["class"].value.replace("language-", "") : "") : lang = "";
 					nodeList.push("\n```" + lang + "\n");
 				} else {

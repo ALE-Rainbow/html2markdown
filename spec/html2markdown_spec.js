@@ -53,6 +53,16 @@ for(var key in parsers) {
 			expect(md).toMatch(/`while\(1\){}`/);
 		});
 
+		it("should be able to convert '<pre><code>{\n\"name\":\"test\"\n}</code></pre>' to '```\n{\n\"name\":\"test\"\n}\n```", function() {
+			var md = markdown("<pre><code>{\n\"name\":\"test\"\n}</code></pre>");
+			expect(md).toMatch(/```\n{\n\s*\"name\":\"test\"\n\s*}\n```/);
+		});
+
+		it("should be able to convert '<pre><code class=\'language-json\'>{\n\"name\":\"test\"\n}</code></pre>' to '```json\n{\n\"name\":\"test\"\n}\n```", function() {
+			var md = markdown("<pre><code class=\'language-json\'>{\n\"name\":\"test\"\n}</code></pre>");
+			expect(md).toMatch(/```json\n{\n\s*\"name\":\"test\"\n\s*}\n```/);
+		});
+
 		it("should be able to convert '<h5>H5</h5>' to '##### H5\\n\\n'", function() {
 			var md = markdown("<h5>H5</h5>");
 			expect(md).toMatch(/\#{5} H5\n\n/);
@@ -475,15 +485,13 @@ for(var key in parsers) {
 		it("should be able to convert <pre><code>...</code></pre> blocks", function() {
 			var html= "<pre><code>{% blockquote [author[, source]] [link] [source_link_title] %}";
 			html+= "\nQuote string";
-			html+= "\n{% endblockquote %}";
-			html+= "\n</code></pre>";
+			html+= "\n{% endblockquote %}</code></pre>";
 
 			var md = markdown(html);
-			expected="    {% blockquote [author[, source]] [link] [source_link_title] %}";
+			expected="    \n```\n{% blockquote [author[, source]] [link] [source_link_title] %}";
 	        expected+="\n    Quote string";
 	        expected+="\n    {% endblockquote %}";
-	        expected+="\n    ";
-	        expected+="\n\n";
+	        expected+="\n```\n";
 
 	        expect(md).toEqual(expected);
 		});
