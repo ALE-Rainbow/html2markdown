@@ -19,5 +19,8 @@
   },
   "author": "Kates Gasis",
   "license": "MIT",
-  "readmeFilename": "README.md"
+  "readmeFilename": "README.md",
+  "dependencies": {
+    "unescape": "^1.0.1"
+  }
 }

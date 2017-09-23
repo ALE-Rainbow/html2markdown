@@ -25,6 +25,8 @@
  https://gist.github.com/kirel/1268753
 */
 
+const decode = require('unescape');
+
 (function (name, definition) {
 	if (typeof define === 'function') { // AMD
 		define(definition);
@@ -60,6 +62,7 @@ function html2markdown(html, opts) {
 	var linkAttrStack = [];
 	var blockquoteStack = [];
 	var preStack = [];
+	var codeStackLanguage = null;
 	var codeStack = [];
 	var links = [];
 	var inlineStyle = opts['inlineStyle'] || false;
@@ -236,6 +239,7 @@ function html2markdown(html, opts) {
 					var attribs = convertAttrs(attrs);
 					attribs["class"] ? lang = (attribs["class"].value ? attribs["class"].value.replace("language-", "") : "") : lang = "";
 					nodeList.push("\n```" + lang + "\n");
+					codeStackLanguage = lang;
 				} else {
 					nodeList.push(markdownTags[tag]);
 				}
@@ -348,6 +352,9 @@ function html2markdown(html, opts) {
 		},
 		chars: function(text) {
 			if (preStack.length > 0) {
+				if( codeStackLanguage && (codeStackLanguage === 'html' || codeStackLanguage === 'xml') ) {
+					text = decode(text);
+				}
 				text = text.replace(/\n/g,"\n    ");
 			} else if (trim(text) != "") {
 				text = text.replace(/\s+/g, " ");
@@ -409,6 +416,7 @@ function html2markdown(html, opts) {
 			case "code":
 				if(preStack.length) {
 					nodeList.push("\n```\n");
+					codeStackLanguage = null;
 				} else {
 					nodeList.push(markdownTags[tag]);
 				}
