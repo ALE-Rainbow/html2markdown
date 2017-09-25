@@ -352,10 +352,13 @@ function html2markdown(html, opts) {
 		},
 		chars: function(text) {
 			if (preStack.length > 0) {
-				if( codeStackLanguage && (codeStackLanguage === 'html' || codeStackLanguage === 'xml') ) {
-					text = decode(text);
+				if( codeStackLanguage ) {
+					if( codeStackLanguage && (codeStackLanguage === 'html' || codeStackLanguage === 'xml') ) {
+						text = decode(text);
+					}
+				} else {
+					text = text.replace(/\n/g,"\n    ");
 				}
-				text = text.replace(/\n/g,"\n    ");
 			} else if (trim(text) != "") {
 				text = text.replace(/\s+/g, " ");
 
